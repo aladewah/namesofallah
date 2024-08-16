@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Names of Allah | Updated </title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 50px;
+    }
+    .column {
+        width: 40%;
+        padding: 20px;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+    }
+    .name {
+        padding: 10px;
+        margin: 5px;
+        background-color: #ddd;
+        cursor: pointer;
+    }
+    .name:hover {
+        background-color: #ccc;
+    }
+    #submitBtn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #counter {
+        margin-top: 20px;
+        font-size: 18px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="column" id="column1"></div>
+    <div class="column" id="column2"></div>
+</div>
+<button id="submitBtn">Submit Answers</button>
+<div id="counter"></div>
+
+<script>
+    const names = ["Ar-Rahmaan", "Ar-Raheem", "Al-Malik", "Al-Quddus", "As-Salam", "Al-Mu'min", "Al-Muhaymin", "Al-Aziz", "Al-Jabbar", "Al-Mutakabbir"];
+
+    const column1 = document.getElementById('column1');
+    const column2 = document.getElementById('column2');
+    const submitBtn = document.getElementById('submitBtn');
+    const counterElement = document.getElementById('counter');
+
+    let score = 0;
+
+    // Shuffle names for the first column
+    shuffle(names);
+
+    // Display names in the first column
+    names.forEach(name => {
+        const nameDiv = document.createElement('div');
+        nameDiv.classList.add('name');
+        nameDiv.textContent = name;
+        nameDiv.draggable = true;
+        column1.appendChild(nameDiv);
+    });
+
+    // Add event listeners for drag and drop
+    column1.addEventListener('dragstart', dragStart);
+    column2.addEventListener('dragover', dragOver);
+    column2.addEventListener('drop', dragDrop);
+    submitBtn.addEventListener('click', submitAnswers);
+
+    function dragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.textContent);
+    }
+
+    function dragOver(event) {
+        event.preventDefault();
+    }
+
+    function dragDrop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        if (event.target.classList.contains('column')) {
+            const nameDiv = document.createElement('div');
+            nameDiv.classList.add('name');
+            nameDiv.textContent = data;
+            nameDiv.draggable = true;
+            event.target.appendChild(nameDiv);
+
+            // Check if the dropped name is in the correct position
+            if (event.target.id === 'column2' && event.target.textContent === data) {
+                score++;
+            }
+        }
+    }
+
+    function submitAnswers() {
+        counterElement.textContent = `Your score: ${score}`;
+    }
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+</script>
+</body>
+</html>
